@@ -13,3 +13,13 @@ export async function postBooking(req: AuthenticatedRequest, res: Response, next
     next(error);
   }
 }
+
+export async function getBooking(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  const { userId } = req;
+  try {
+    const result = await bookingsService.getBookingByUserId(userId);
+    return res.status(httpStatus.OK).send(result);
+  } catch (error) {
+    next(error);
+  }
+}

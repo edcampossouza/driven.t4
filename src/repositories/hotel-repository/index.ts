@@ -37,11 +37,18 @@ async function bookRoom(userId: number, roomId: number): Promise<Booking> {
   });
 }
 
+async function getBookingByUserId(userId: number): Promise<{ Room: Room; id: number }> {
+  const booking = await prisma.booking.findFirst({ select: { id: true, Room: true }, where: { userId } });
+
+  return booking;
+}
+
 const hotelRepository = {
   findHotels,
   findRoomsByHotelId,
   findRoomById,
   bookRoom,
+  getBookingByUserId,
 };
 
 export default hotelRepository;
