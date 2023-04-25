@@ -43,12 +43,17 @@ async function getBookingByUserId(userId: number): Promise<{ Room: Room; id: num
   return booking;
 }
 
+async function updateBookingRoom(bookingId: number, roomId: number): Promise<void> {
+  await prisma.booking.update({ where: { id: bookingId }, data: { roomId } });
+}
+
 const hotelRepository = {
   findHotels,
   findRoomsByHotelId,
   findRoomById,
   bookRoom,
   getBookingByUserId,
+  updateBookingRoom,
 };
 
 export default hotelRepository;

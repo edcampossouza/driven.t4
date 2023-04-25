@@ -41,7 +41,21 @@ async function getBookingByUserId(userId: number): Promise<{ id: number; Room: R
   return result;
 }
 
+async function updateBooking(userId: number, roomId: number): Promise<{ bookingId: number }> {
+  const booking = await hotelRepository.getBookingByUserId(userId);
+  if (!booking) throw cannotCreateBooking('No previous booking');
+  const newRoom = await hotelRepository.findRoomById(roomId);
+  if (!newRoom) throw notFoundError();
+  if (newRoom.id !== booking.Room.id && newRoom.occupied >= newRoom.capacity)
+    throw cannotCreateBooking('No vancancies for selected room');
+
+  await hotelRepository.updateBookingRoom(booking.id, newRoom.id);
+
+  return { bookingId: booking.id };
+}
+
 export default {
   createBooking,
   getBookingByUserId,
+  updateBooking,
 };
