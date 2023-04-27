@@ -43,6 +43,12 @@ async function getBookingByUserId(userId: number): Promise<{ Room: Room; id: num
   return booking;
 }
 
+async function getBookingById(bookingId: number): Promise<{ Room: Room; id: number }> {
+  const booking = await prisma.booking.findFirst({ select: { id: true, Room: true }, where: { id: bookingId } });
+
+  return booking;
+}
+
 async function updateBookingRoom(bookingId: number, roomId: number): Promise<void> {
   await prisma.booking.update({ where: { id: bookingId }, data: { roomId } });
 }
@@ -54,6 +60,7 @@ const hotelRepository = {
   bookRoom,
   getBookingByUserId,
   updateBookingRoom,
+  getBookingById,
 };
 
 export default hotelRepository;

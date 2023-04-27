@@ -41,7 +41,7 @@ async function getBookingByUserId(userId: number): Promise<{ id: number; Room: R
   return result;
 }
 
-async function updateBooking(userId: number, roomId: number): Promise<{ bookingId: number }> {
+async function updateBooking(userId: number, bookingId: number, roomId: number): Promise<{ bookingId: number }> {
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
 
   if (!enrollment) {
@@ -54,7 +54,7 @@ async function updateBooking(userId: number, roomId: number): Promise<{ bookingI
     throw cannotCreateBooking('Invalid ticket');
   }
 
-  const booking = await hotelRepository.getBookingByUserId(userId);
+  const booking = await hotelRepository.getBookingById(bookingId);
   if (!booking) throw cannotCreateBooking('No previous booking');
   const newRoom = await hotelRepository.findRoomById(roomId);
   if (!newRoom) throw notFoundError();
